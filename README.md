@@ -9,9 +9,11 @@ I added a cleaner look to the panel and added the panel settings to option bool.
 
 ## Extra Image List
 
-This addon makes it possible to save rig setup to a preset folder. The function was already existing but would generate a text inside Blender. I simply added some new functions so these presets can directly be saved in the Blender preset folder of Metarigs. Presets can be added to a folder as well as new folders can be created.
+Have you ever struggled with the tiny pop-up list in the UV/Image Editor? So have I!
 
-The added presets can then be loaded directly using the add menu. To get the new preset to show, you need to either restart blender or reload the all the addons pressing F8. Its also now possible save Rigify main settings as presets. These can be loaded at any time, no need for a refresh.
+Therefore, I made an addon that enables to pop-up an extra image list with specified number of rows and columns. Optionally, you can display all images in a plain list.
+
+Moreover, the addon contains a button to clear all users for the selected image datablock. So, the image datablock can disappear after save and reload of the blend file and you can easily get rid of unwanted image datablocks.
 
 >Addon documentation can be found at: <b>[MeshLogic / Extra Image List](https://meshlogic.github.io/posts/blender/addons/extra-image-list/)</b>
 
