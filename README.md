@@ -50,12 +50,6 @@ Moreover, the addon contains a button to clear all users for the selected image 
 [Full Changelog](CHANGELOG.md)
 
 
-
-
-
-<!--
-- Fill in data
- -
- -
--->
+[0.2.2]:https://github.com/schroef/Extra-Image-List/releases/tag/0.2.2
+[0.2.1]:https://github.com/schroef/Extra-Image-List/releases/tag/0.2.1
 
