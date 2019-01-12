@@ -1,4 +1,4 @@
-# Extra Image List update
+# Extra Image List update [bl 2.80]
 
 >Original addon from <b>MeshLogic</b>
 
@@ -27,8 +27,8 @@ The added presets can then be loaded directly using the add menu. To get the new
 
 | **OS** | **Blender** |
 | ------------- | ------------- |
-| OSX | Blender 2.78+ |
-| Windows | Blender 2.78+ |
+| OSX | Blender 2.80 |
+| Windows | Blender 2.80 |
 | Linux | Not Tested |
 
 
