@@ -12,7 +12,7 @@ This addon makes it possible to save rig setup to a preset folder. The function 
 
 The added presets can then be loaded directly using the add menu. To get the new preset to show, you need to either restart blender or reload the all the addons pressing F8. Its also now possible save Rigify main settings as presets. These can be loaded at any time, no need for a refresh.
 
-!['GUI Extra Image List'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list.png?v22-09-2018)
+!['GUI Extra Image List'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list.jpg?v22-09-2018)
 
 >Addon documentation can be found at: <b>[MeshLogic / Extra Image List](https://meshlogic.github.io/posts/blender/addons/extra-image-list/)</b>
 
