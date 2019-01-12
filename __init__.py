@@ -9,14 +9,26 @@
 # Revised: 30.05.2017
 # Author: Miki (meshlogic)
 #-------------------------------------------------------------------------------
+
+#######################################################
+
+## Exra Image List ######
+##
+## v0.2.3
+## 10-10-09 - Got 2.80 working
+
+#######################################################
+
+
+
 bl_info = {
 	"name": "Extra Image List",
 	"author": "Miki (meshlogic) - Rombout Versluijs (updated panel)",
 	"category": "UV",
 	"description": "An alternative image list for UV/Image Editor.",
 	"location": "UV/Image Editor > Tools > Image List",
-	"version": (0, 2, 2),
-	"blender": (2, 78, 0),
+	"version": (0, 2, 3),
+	"blender": (2, 80, 0),
 	"wiki_url": "https://meshlogic.github.io/posts/blender/addons/extra-image-list/",
 	"tracker_url": "https://github.com/schroef/Extra-Image-List",
 }
@@ -24,16 +36,22 @@ bl_info = {
 import bpy
 import os
 from bpy.props import *
-from bpy.types import Menu, Operator, Panel, UIList
+
+from bpy.types import (
+	Panel, AddonPreferences, Menu, Operator, Scene, UIList, PropertyGroup
+	)
+from bpy.props import (
+	EnumProperty, StringProperty, BoolProperty, IntProperty, PointerProperty
+	)
 from bpy.app.handlers import persistent
 
 
 #-------------------------------------------------------------------------------
 # UI PANEL - Extra Image List
 #-------------------------------------------------------------------------------
-class ExtraImageList_PT_ImagePreview(Panel):
+class EIL_PT_ImageListPanel(Panel):
 	bl_space_type = 'IMAGE_EDITOR'
-	bl_region_type = 'TOOLS'
+	bl_region_type = 'UI'
 	bl_category = "Image List"
 	bl_label = "Extra Image List"
 
@@ -51,33 +69,33 @@ class ExtraImageList_PT_ImagePreview(Panel):
 		#-----------------------------------------------------------------------
 		#--- List style buttons
 		#--- Num. of rows & cols for image preview list
-		row = layout.row(True)
+		row = layout.row(align=True)
 		row.prop(props,"options", icon="PREFERENCES")
 		if props.options:
 			layout = layout.box()
 			split = layout.split()
 
 			colm = split.column()
-			column = colm.column(True)
-			column.label("Preview Style:")
+			column = colm.column(align=True)
+			column.label(text="Preview Style:")
 			if props.style =='PREVIEW':
-				column.label(" ")
-				column.label(" ")
-			column.label(" ")
+				column.label(text=" ")
+				column.label(text=" ")
+			column.label(text=" ")
 			column.prop(props,"clean_enabled")
 
 			colm = split.column()
-			column = colm.column(True)
+			column = colm.column(align=True)
 			column.prop(props, "style", text="")
 			if props.style =='PREVIEW':
 				column.prop(props, "rows")
 				column.prop(props, "cols")
-			column.label(" ")
+			column.label(text=" ")
 
-			columr = colm.column(True)
+			columr = colm.column(align=True)
 			sub = columr
 			sub.prop(props, "clear_mode", text="")
-			sub.operator("extra_image_list.clear", text="Clear", icon='RADIO')
+			sub.operator("extra_image_list.clear", text="Clear", icon='ERROR')
 			sub.active = props.clean_enabled == True
 			sub.enabled = props.clean_enabled == True
 
@@ -118,8 +136,8 @@ class ExtraImageList_PT_ImagePreview(Panel):
 			row = layout.row()
 
 			row.prop(img, "source")
-			#row.label("Image Source:", icon='DISK_DRIVE')
-			row = layout.row(True)
+			#row.label(text="Image Source:", icon='DISK_DRIVE')
+			row = layout.row(align=True)
 
 			if img.source == 'FILE':
 				if img.packed_file:
@@ -130,32 +148,32 @@ class ExtraImageList_PT_ImagePreview(Panel):
 				row.prop(img, "filepath", text="")
 				row.operator("image.reload", text="", icon='FILE_REFRESH')
 			else:
-				row.label(img.source + " : " + img.type)
+				row.label(text=img.source + " : " + img.type)
 
 			#--- Image size
-			col = layout.column(True)
-			row = layout.row(True)
+			col = layout.column(align=True)
+			row = layout.row(align=True)
 			row.alignment = 'LEFT'
 
 			if img.has_data:
 
 				filename = os.path.basename(img.filepath)
 				#--- Image name
-				col.label(filename, icon='FILE_IMAGE')
+				col.label(text=filename, icon='FILE_IMAGE')
 				#--- Image size
-				row.label("Size:", icon='TEXTURE')
-				row.label("%d x %d x %db" % (img.size[0], img.size[1], img.depth))
+				row.label(text="Size:", icon='TEXTURE')
+				row.label(text="%d x %d x %db" % (img.size[0], img.size[1], img.depth))
 			else:
-				row.label("Can't load image file!", icon='ERROR')
+				row.label(text="Can't load image file!", icon='ERROR')
 
 
 
 		row = layout.row()
-		split = row.split(percentage=0.5)
+		split = row.split(factor=0.5)
 		#--- Navigation button PREV
 		sub = split.column()
 		sub.scale_y = 2
-		sub.operator("extra_image_list.nav", text="", icon='BACK').dir = 'PREV'
+		sub.operator("extra_image_list.nav", text="", icon='BACK').direction = 'PREV'
 
 		# Disable button for the first image or for no images
 		sub.enabled = (img!=img_list[0] if (img!=None and len(img_list)>0) else False)
@@ -163,7 +181,7 @@ class ExtraImageList_PT_ImagePreview(Panel):
 		#--- Navigation button NEXT
 		sub = split.column()
 		sub.scale_y = 2
-		sub.operator("extra_image_list.nav", text="", icon='FORWARD').dir = 'NEXT'
+		sub.operator("extra_image_list.nav", text="", icon='FORWARD').direction = 'NEXT'
 
 		# Disable button for the last image or for no images
 		sub.enabled = (img!=img_list[-1] if (img!=None and len(img_list)>0) else False)
@@ -171,24 +189,33 @@ class ExtraImageList_PT_ImagePreview(Panel):
 #-------------------------------------------------------------------------------
 # CUSTOM TEMPLATE_LIST FOR IMAGES
 #-------------------------------------------------------------------------------
-class ExtraImageList_UL(UIList):
+class EIL_UL_ImageList(UIList):
 	bl_idname = "extra_image_list.image_list"
 
 	def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+		##NEW BL280
+		# 'DEFAULT' and 'COMPACT' layout types should usually use the same draw code.
+		if self.layout_type in {'DEFAULT', 'COMPACT'}:
+			pass
+		# 'GRID' layout type should be as compact as possible (typically a single icon!).
+		elif self.layout_type in {'GRID'}:
+			pass
 
 		# Image name and icon
-		row = layout.row(True)
+		row = layout.row(align=True)
+		if data == None:
+			row.prop(item, "name", text="", emboss=False, icon_value=custom_icons["image_empty"].icon_id)
 		row.prop(item, "name", text="", emboss=False, icon_value=icon)
 
 		# Image status (fake user, zero users, packed file)
-		row = row.row(True)
+		row = row.row(align=True)
 		row.alignment = 'RIGHT'
 
 		if item.use_fake_user:
-			row.label("F")
+			row.label(text="F")
 		else:
 			if item.users == 0:
-				row.label("0")
+				row.label(text="0")
 
 		if item.packed_file:
 			#row.label(icon='PACKAGE')
@@ -210,17 +237,17 @@ def update_active_image(self, context):
 #-------------------------------------------------------------------------------
 # IMAGE NAVIGATION OPERATOR
 #-------------------------------------------------------------------------------
-class ExtraImageList_PT_Nav(Operator):
+class EIL_OT_Nav(Operator):
 	bl_idname = "extra_image_list.nav"
 	bl_label = "Nav"
 	bl_description = "Navigation button"
 
-	dir = EnumProperty(
+	direction : EnumProperty(
 		items = [
 			('NEXT', "PREV", "PREV"),
 			('PREV', "PREV", "PREV")
 		],
-		name = "dir",
+		name = "direction",
 		default = 'NEXT')
 
 	def execute(self, context):
@@ -236,11 +263,11 @@ class ExtraImageList_PT_Nav(Operator):
 			return{'FINISHED'}
 
 		# Navigate
-		if self.dir == 'NEXT':
+		if self.direction == 'NEXT':
 			if id+1 < len(img_list):
 				context.space_data.image = img_list[id+1]
 
-		if self.dir == 'PREV':
+		if self.direction == 'PREV':
 			if id > 0:
 				context.space_data.image = img_list[id-1]
 
@@ -255,7 +282,7 @@ BAKE_TYPES = ('COMBINED', 'AO', 'SHADOW', 'NORMAL', 'UV', 'EMIT', 'ENVIRONMENT',
 			  'FULL', 'NORMALS', 'TEXTURE', 'DISPLACEMENT', 'DERIVATIVE', 'VERTEX_COLORS', 'EMIT',
 			  'ALPHA', 'MIRROR_INTENSITY', 'MIRROR_COLOR', 'SPEC_INTENSITY', 'SPEC_COLOR')
 
-class ExtraImageList_PT_Clear(Operator):
+class EIL_OT_Clear(Operator):
 	bl_idname = "extra_image_list.clear"
 	bl_label = "Clear Users"
 	bl_description = """Use with caution !!\nClear all users for selected image datablocks.\nSo the image datablock can disappear after save and reload of the blend file."""
@@ -334,7 +361,7 @@ class ExtraImageList_PT_Clear(Operator):
 #-------------------------------------------------------------------------------
 IMG_NODES = ("ShaderNodeTexImage", "ShaderNodeTexEnvironment")
 
-class ShowNodeImage_PT(Operator):
+class EIL_OT_ShowNodeImage(Operator):
 	bl_idname = "node.show_image"
 	bl_label = "Show node image in the UV/Image Editor"
 
@@ -357,7 +384,7 @@ class ShowNodeImage_PT(Operator):
 
 
 #-------------------------------------------------------------------------------
-# CUSTOM HANDLER (scene_update_post)
+# CUSTOM HANDLER (scene_update_post) #NEW name bl 2.80 depsgraph_update_post
 # - This handler is invoked after the scene updates
 # - Keeps template_list synced with the active image
 #-------------------------------------------------------------------------------
@@ -385,9 +412,9 @@ def update_image_list(context):
 #-------------------------------------------------------------------------------
 # CUSTOM SCENE PROPS
 #-------------------------------------------------------------------------------
-class ExtraImageList_Props(bpy.types.PropertyGroup):
+class ExtraImageList_Props(PropertyGroup):
 
-	style = EnumProperty(
+	style : EnumProperty(
 		items = [
 			('PREVIEW', "Preview", "", 0),
 			('LIST', "List", "", 1),
@@ -396,12 +423,12 @@ class ExtraImageList_Props(bpy.types.PropertyGroup):
 		name = "Style",
 		description = "Image list style")
 
-	clean_enabled = BoolProperty(
+	clean_enabled : BoolProperty(
 			default=False,
 			name="Clean:",
 			description="Enables option to clear scene of image textures. Be careful!")
 
-	clear_mode = EnumProperty(
+	clear_mode : EnumProperty(
 		items = [
 			('NO USERS', "No Users", "Clears all images with no users", 0),
 			('SELECTED', "Selected Image", "Clear the image selected in the editor", 1),
@@ -414,55 +441,92 @@ class ExtraImageList_Props(bpy.types.PropertyGroup):
 		name = "Image Selection",
 		description = "Select images to be cleared")
 
-	rows = IntProperty(
+	rows : IntProperty(
 		name = "Rows",
 		description = "Num. of rows in the preview list",
 		default = 4, min = 1, max = 15)
 
-	cols = IntProperty(
+	cols : IntProperty(
 		name = "Cols",
 		description = "Num. of columns in the preview list",
 		default = 8, min = 1, max = 30)
 
 	# Index of the active image in the template_list
-	image_id = IntProperty(
+	image_id : IntProperty(
+		name = "Image ID",
 		default = 0,
 		update = update_active_image)
 
-	options = BoolProperty(
+	options : BoolProperty(
 		 name="Options",
 		 default=False)
 
-	settings = BoolProperty(
+	settings : BoolProperty(
 		 name="Settings",
 		 default=False)
 
+def icon_Load():
+	# importing icons
+	import bpy.utils.previews
+	global custom_icons
+	custom_icons = bpy.utils.previews.new()
+
+	# path to the folder where the icon is
+	# the path is calculated relative to this py file inside the addon folder
+	icons_dir = os.path.join(os.path.dirname(__file__), "icons")
+
+	# load a preview thumbnail of a file and store in the previews collection
+	custom_icons.load("empty", os.path.join(icons_dir, "empty_image_128x.png"), 'IMAGE')
+
+# global variable to store icons in
+custom_icons = None
 
 #-------------------------------------------------------------------------------
 # REGISTER/UNREGISTER ADDON CLASSES
 #-------------------------------------------------------------------------------
 keymaps = []
 
+#Classes for register and unregister
+classes = (
+	EIL_PT_ImageListPanel,
+	EIL_UL_ImageList,
+	EIL_OT_ShowNodeImage,
+	##NW bl280 PropertyGroup Needs to be added now?
+	ExtraImageList_Props,
+	EIL_OT_Clear,
+	EIL_OT_Nav,
+	)
+
 def register():
-	bpy.utils.register_module(__name__)
+	for cls in classes:
+		bpy.utils.register_class(cls)
+
 	bpy.types.Scene.extra_image_list = PointerProperty(type=ExtraImageList_Props)
-	bpy.app.handlers.scene_update_post.append(update_image_list)
+	#bpy.app.handlers.depsgraph_update_post.append(update_image_list)
+
 
 	# Add custom shortcut (image node double click)
 	kc = bpy.context.window_manager.keyconfigs.addon
 	km = kc.keymaps.new(name="Node Editor", space_type='NODE_EDITOR')
-	kmi = km.keymap_items.new("node.show_image", 'ACTIONMOUSE', 'DOUBLE_CLICK')
+	kmi = km.keymap_items.new("node.show_image", 'RIGHTMOUSE', 'DOUBLE_CLICK')
 	keymaps.append((km, kmi))
+	icon_Load()
 
 def unregister():
-	bpy.utils.unregister_module(__name__)
+	global custom_icons
+	bpy.utils.previews.remove(custom_icons)
+
 	del bpy.types.Scene.extra_image_list
-	bpy.app.handlers.scene_update_post.remove(update_image_list)
+	#bpy.app.handlers.depsgraph_update_post.remove(update_image_list)
 
 	# Remove custom shortcuts
 	for km, kmi in keymaps:
 		km.keymap_items.remove(kmi)
 	keymaps.clear()
+
+	for cls in reversed(classes):
+		bpy.utils.unregister_class(cls)
+
 
 if __name__ == "__main__":
 	register()
