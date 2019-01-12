@@ -30,6 +30,8 @@ The added presets can then be loaded directly using the add menu. To get the new
 | Windows | Blender 2.78+ |
 | Linux | Not Tested |
 
+>Blender 2.80 | Pre-release
+> Try this pre-release branch for Blender 2.80: [Pre-release 2.80](https://github.com/schroef/Extra-Image-List/tree/bl280_dev)
 
 ### Installation Process
 
@@ -45,13 +47,6 @@ The added presets can then be loaded directly using the add menu. To get the new
 
 ### Changelog
 [Full Changelog](CHANGELOG.md)
-
-
-### Blender 2.80 | Pre-release
-
-Try this pre-release branch for Blender 2.80 [Pre-release 2.80](https://github.com/schroef/Extra-Image-List/tree/bl280_dev)
-
-
 
 
 <!--
