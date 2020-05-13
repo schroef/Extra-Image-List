@@ -8,6 +8,12 @@
 ehthumbs.db
 Thumbs.db
 
-# git & github folders
+# git folder
 .git/
+
+# github folder
 .github/
+
+# gotignore
+.gitignore
+
