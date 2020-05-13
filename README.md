@@ -1,10 +1,11 @@
-# Extra Image List update
+# Extra Image List update [bl 2.80]
 
 >Original addon from <b>MeshLogic</b>
 
 I added a cleaner look to the panel and added the panel settings to option bool. I also added source image so users can pick image sequence or sinle image. I Also added is showing the image texture name above its size, this is very convienent because the source path only shows a very small section. This makes it much easier to identify the used texture.
 
-!['GUI Extra Image List'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list.jpg?v22-09-2018)
+!['Example Rig Presets'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list-update_bl280.jpg?v11-01-2019)
+
 
 ## Extra Image List
 
@@ -26,8 +27,8 @@ The added presets can then be loaded directly using the add menu. To get the new
 
 | **OS** | **Blender** |
 | ------------- | ------------- |
-| OSX | Blender 2.78+ |
-| Windows | Blender 2.78+ |
+| OSX | Blender 2.80 |
+| Windows | Blender 2.80 |
 | Linux | Not Tested |
 
 ### Blender 2.80 | Pre-release
@@ -47,6 +48,9 @@ Try this pre-release branch for Blender 2.80: [bl280_dev](https://github.com/sch
 
 ### Changelog
 [Full Changelog](CHANGELOG.md)
+
+
+
 
 
 <!--
