@@ -1,3 +1,6 @@
+# exclude .gitignore and similar from the generated tarball
+.git*           export-ignore
+
 # OS generated files #
 ######################
 .DS_Store
