@@ -1,4 +1,4 @@
-# Extra Image List update [bl 2.80]
+# Extra Image List
 
 >Original addon from <b>MeshLogic</b>
 
@@ -31,8 +31,6 @@ The added presets can then be loaded directly using the add menu. To get the new
 | Windows | Blender 2.80 |
 | Linux | Not Tested |
 
-### Blender 2.80 | Pre-release
-Try this pre-release branch for Blender 2.80: [bl280_dev](https://github.com/schroef/Extra-Image-List/tree/bl280_dev)
 
 ### Installation Process
 
@@ -43,7 +41,6 @@ Try this pre-release branch for Blender 2.80: [bl280_dev](https://github.com/sch
 5. At the bottom of the window, choose *Install From File*.
 6. Select the file `extra-image-list-master.zip` from your download location..
 7. Activate the checkbox for the plugin that you will now find in the list.
-
 
 
 ### Changelog
