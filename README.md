@@ -1,4 +1,4 @@
-# Extra Image List update [bl 2.80]
+# Extra Image List
 
 >Original addon & documentation can be found at: <b>[MeshLogic / Extra Image List](https://meshlogic.github.io/posts/blender/addons/extra-image-list/)</b>
 
