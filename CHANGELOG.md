@@ -2,12 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+
 ## [0.2.8] - 2024-11-05
 
 ### Fixed
 
-- Poll isseu texture preview > update nested image texture nodegroup
-- Update not working for neste image texture > nodegroup
+- Poll issue texture preview > update nested image texture nodegroup
+- Update not working for nested image texture > nodegroup
 
 ### Changed
 
@@ -17,13 +18,13 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Poll isseu texture preview > #295
+- Poll issue texture preview > [#295](https://github.com/schroef/Extra-Image-List/issues/295)
 
 ## [0.2.6] - 2021-11-01
 
 ### Fixed
 
-- Poll isseu texture preview
+- Poll issue texture preview
 
 ## [0.2.5] - 2021-07-29
 
@@ -33,13 +34,13 @@ All notable changes to this project will be documented in this file.
 
 ## [0.2.4] - 2021-04-06
 
-### Added 
+### Added
 
-- Node textore node update btn
+- Node texture node update button
 - Simple updater check
 - Show/hide info > cleaner panel
 
-### Updated 
+### Updated
 
 - Panel design to 2.8 with sup-panels
 - Fixed list view updating with arrow buttons
