@@ -4,15 +4,16 @@
 
 I added a cleaner look to the panel and added the panel settings to option bool. I also added source image so users can pick image sequence or sinle image. I Also added is showing the image texture name above its size, this is very convienent because the source path only shows a very small section. This makes it much easier to identify the used texture.
 
-!['Preview extra imge list'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list-update_bl280.jpg?2021-04-09)
+!['Preview extra imge list'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list-v028.jpg?2025-11-06)
 
 
 ## Features
 
-- Two display options (preview and plain list)
+- Two display options (preview and plain list) Set Rows & Columns
 - Button to clear all users for the selected image datablock
 - Double click on an image in the Node Editor opens the image in the UV/Image Editor
 - Located in UV/Image Editor - Tools panel (T)
+- Quickly update active image node from UV editor > selected image will be changed in Image Texture Node
 
 
 ### System Requirements
