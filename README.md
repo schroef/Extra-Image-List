@@ -4,7 +4,7 @@
 
 I added a cleaner look to the panel and added the panel settings to option bool. I also added source image so users can pick image sequence or sinle image. I Also added is showing the image texture name above its size, this is very convienent because the source path only shows a very small section. This makes it much easier to identify the used texture.
 
-!['Preview extra imge list'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list-v028.jpg?2025-11-06)
+!['Preview extra imge list'](https://raw.githubusercontent.com/wiki/schroef/extra-image-list/images/extra-image-list-v029.jpg?2025-11-12)
 
 
 ## Features

@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.2.9] - 2024-11-08
+
+### Removed
+
+- Simple Updater, think about Blenders Extension Platform, easier method perhaps
+
+### Fixed
+
+- poll issue with nodes light object > use different approach to get active node vs material
+
 ## [0.2.8] - 2024-11-05
 
 ### Fixed
@@ -80,6 +90,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+[0.2.9]:https://github.com/schroef/Extra-Image-List/releases/tag/v0.2.9
 [0.2.8]:https://github.com/schroef/Extra-Image-List/releases/tag/v0.2.8
 [0.2.3]:https://github.com/schroef/Extra-Image-List/releases/tag/v.0.2.3
 [0.2.2_2.80]:https://github.com/schroef/Extra-Image-List/releases/tag/v.0.2.2_2.80

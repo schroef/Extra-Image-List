@@ -17,7 +17,17 @@
 
 # Changelog
 
-## v0.2.8 - 2024-11-05
+## [0.2.9] - 2024-11-12
+
+### Removed
+
+- Updater, thing about Blenders Extension Platform, easier method perhaps
+
+### Fixed
+
+- poll issue with nodes light object > use different approach to get active node vs material
+
+## [0.2.8] - 2024-11-05
 
 ### Fixed
 
@@ -28,25 +38,25 @@
 
 -Shortcut double Right Click to preview texture UV Editor > Double Left click
 
-## v0.2.7 - 2022-05-16
+## 0.2.7] - 2022-05-16
 
 ### Fixed
 
 - Poll isseu texture preview > #295
 
-## v0.2.6 - 2021-11-01
+## [0.2.6] - 2021-11-01
 
 ### Fixed
 
 - Poll isseu texture preview
 
-## v0.2.5 - 2021-07-29
+## [0.2.5] - 2021-07-29
 
 ### Fixed
 
 - Panel issue difference 2.83 and 290
 
-## v0.2.4 - 2021-04-06 
+## [0.2.4] - 2021-04-06 
 
 ### Added
 
@@ -63,7 +73,7 @@
 
 - List view updating with arrow buttons
 
-## v0.2.3 - 2019-11-01 
+## [0.2.3] - 2019-11-01 
 
 ### Fixed
 
@@ -83,7 +93,7 @@ bl_info = {
     "category": "UV",
     "description": "An alternative image list for UV/Image Editor.",
     "location": "UV/Image Editor > Tools > Image List",
-    "version": (0, 2, 8),
+    "version": (0, 2, 9),
     "blender": (2, 80, 0),
     "wiki_url": "https://github.com/schroef/Extra-Image-List",
     "tracker_url": "https://github.com/schroef/Extra-Image-List/issues",
@@ -110,9 +120,6 @@ from bpy.props import (
     PointerProperty
     )
 from bpy.app.handlers import persistent
-
-from . import updater
-
 #-------------------------------------------------------------------------------
 # UI PANEL - Extra Image List
 #-------------------------------------------------------------------------------
@@ -324,6 +331,7 @@ class EIL_OT_UpdateNode(Operator):
 
     @classmethod
     def poll(cls, context):
+        aNode = None
         # print(bpy.context.active_object.active_material)
         # print(bpy.context.active_object.active_material.node_tree.nodes.active)
         # return context.active_node and context.active_node.type == 'TEX_IMAGE' 
@@ -331,21 +339,35 @@ class EIL_OT_UpdateNode(Operator):
         # return context.scene.node_tree.nodes.active and context.scene.node_tree.nodes.active.type == 'TEX_IMAGE' 
         # return context.active_object.active_material.node_tree.nodes.active is not None
         # return context.active_node is not None
-        if bpy.context.active_object.active_material:
-            actN = bpy.context.active_object.active_material.node_tree.nodes.active
-            if actN.type=='GROUP':
-                actN = actN.node_tree.nodes.active
+        # actN = context.active_node
+        if bpy.context.active_object.type == 'LIGHT':
+            ntree = bpy.context.active_object.data.id_data.node_tree
+            aNode = ntree.nodes.active 
+        else:
+            if bpy.context.active_object.active_material:
+                aNode = bpy.context.active_object.active_material.node_tree.nodes.active
+        if aNode!=None:
+            if aNode.type=='GROUP':
+                aNode = aNode.node_tree.nodes.active
         else: 
             return False
-        # print(actN)
-        # print(actN.type)
-        return actN.type == 'TEX_IMAGE' and actN != None and bpy.context.active_object.active_material.node_tree.nodes
+        return aNode.type == 'TEX_IMAGE' and aNode != None #and bpy.context.active_object.active_material.node_tree.nodes
 
     def execute(self, context):
+        aNode = None
         # Get active node
-        aNode = context.active_object.active_material.node_tree.nodes.active
-        if aNode.type=='GROUP':
-            aNode = aNode.node_tree.nodes.active
+        if bpy.context.active_object.type == 'LIGHT':
+            ntree = bpy.context.active_object.data.id_data.node_tree
+            aNode = ntree.nodes.active 
+        else:
+            if bpy.context.active_object.active_material:
+                aNode = bpy.context.active_object.active_material.node_tree.nodes.active
+        
+        # print(aNode.type)
+        # aNode = context.active_object.active_material.node_tree.nodes.active
+        if aNode!=None:
+            if aNode.type=='GROUP':
+                aNode = aNode.node_tree.nodes.active
 
         # Get list of all images
         img_list = list(bpy.data.images)
@@ -640,8 +662,6 @@ def register():
     bpy.types.Scene.extra_image_list = PointerProperty(type=ExtraImageList_Props)
     bpy.app.handlers.depsgraph_update_post.append(update_image_list)
 
-    updater.check(bl_info)
-    updater.register()
 
     # Add custom shortcut (image node double click)
     kc = bpy.context.window_manager.keyconfigs.addon
@@ -651,8 +671,6 @@ def register():
     icon_Load()
 
 def unregister():
-    
-    updater.unregister()
     global custom_icons
     bpy.utils.previews.remove(custom_icons)
 
